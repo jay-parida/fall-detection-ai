@@ -1,0 +1,1555 @@
+/* ============================================================
+   GLOBAL
+============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  background: #f4f6f9;
+
+  color: #172033;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+
+/* ============================================================
+   APP
+============================================================ */
+
+.app {
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(99, 102, 241, 0.06),
+      transparent 35%
+    ),
+    #f4f6f9;
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header {
+  height: 82px;
+
+  padding: 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-bottom: 1px solid #e6e9ef;
+
+  position: relative;
+  z-index: 20;
+}
+
+
+/* ============================================================
+   BRAND
+============================================================ */
+
+.brand {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.brand-icon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef2ff,
+      #e0e7ff
+    );
+
+  font-size: 23px;
+
+  box-shadow:
+    0 5px 14px rgba(79, 70, 229, 0.08);
+}
+
+.brand h1 {
+  margin: 0;
+
+  font-size: 20px;
+
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+
+  color: #111827;
+}
+
+.brand p {
+  margin: 4px 0 0;
+
+  font-size: 12px;
+
+  color: #7a8496;
+}
+
+
+/* ============================================================
+   HEADER STATUS
+============================================================ */
+
+.system-status {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.system-status strong {
+  display: block;
+
+  font-size: 13px;
+
+  color: #374151;
+}
+
+.system-status span {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: 11px;
+
+  color: #9aa3b2;
+}
+
+.system-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #cbd0d8;
+}
+
+.system-dot.active {
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+.dashboard {
+  width: min(
+    1180px,
+    calc(100% - 48px)
+  );
+
+  margin: 0 auto;
+
+  padding: 34px 0 55px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+
+/* ============================================================
+   PAGE HEADING
+============================================================ */
+
+.page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 3px;
+}
+
+.eyebrow {
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.6px;
+
+  color: #6366f1;
+}
+
+.page-heading h2 {
+  margin: 7px 0 4px;
+
+  font-size: 29px;
+
+  line-height: 1.1;
+
+  letter-spacing: -0.8px;
+
+  color: #111827;
+}
+
+.page-heading p {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #7b8494;
+}
+
+
+/* ============================================================
+   MONITOR BADGE
+============================================================ */
+
+.monitor-badge {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 750;
+}
+
+.monitor-badge span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+}
+
+.monitor-badge.safe {
+  color: #15803d;
+
+  background: #ecfdf3;
+}
+
+.monitor-badge.safe span {
+  background: #22c55e;
+}
+
+.monitor-badge.danger {
+  color: #b91c1c;
+
+  background: #fef2f2;
+
+  animation: pulseAlert 1.6s infinite;
+}
+
+.monitor-badge.danger span {
+  background: #ef4444;
+}
+
+.monitor-badge.offline {
+  color: #6b7280;
+
+  background: #f1f3f5;
+}
+
+.monitor-badge.offline span {
+  background: #9ca3af;
+}
+
+
+/* ============================================================
+   FALL ALERT
+============================================================ */
+
+.fall-alert {
+  min-height: 100px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 17px;
+
+  padding: 20px 23px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff5f5,
+      #fffafa
+    );
+
+  border: 1px solid #fecaca;
+
+  box-shadow:
+    0 7px 24px rgba(239, 68, 68, 0.07);
+
+  animation: alertAppear 0.35s ease;
+}
+
+.alert-icon {
+  width: 50px;
+  height: 50px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #fee2e2;
+
+  font-size: 23px;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-content > span {
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+
+  color: #dc2626;
+}
+
+.alert-content h3 {
+  margin: 3px 0;
+
+  font-size: 19px;
+
+  color: #991b1b;
+}
+
+.alert-content p {
+  margin: 0;
+
+  font-size: 12px;
+
+  color: #b45353;
+}
+
+.event-time {
+  padding-left: 24px;
+
+  border-left: 1px solid #fecaca;
+
+  text-align: right;
+}
+
+.event-time span {
+  display: block;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: #b45353;
+}
+
+.event-time strong {
+  display: block;
+
+  margin-top: 4px;
+
+  font-size: 23px;
+
+  font-variant-numeric: tabular-nums;
+
+  color: #991b1b;
+}
+
+
+/* ============================================================
+   CAMERA CARD
+============================================================ */
+
+.camera-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: #111827;
+
+  border: 1px solid #1f2937;
+
+  box-shadow:
+    0 14px 40px rgba(15, 23, 42, 0.13);
+
+  position: relative;
+
+  isolation: isolate;
+}
+
+
+/* ============================================================
+   CAMERA HEADER
+============================================================ */
+
+.camera-header {
+  min-height: 70px;
+
+  padding: 0 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #171f2e;
+
+  border-bottom: 1px solid #273246;
+}
+
+.camera-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.camera-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #222c3d;
+
+  font-size: 17px;
+}
+
+.camera-heading h3 {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #f8fafc;
+}
+
+.camera-heading p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #8793a7;
+}
+
+.camera-live {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 7px 10px;
+
+  border-radius: 7px;
+
+  background: #202938;
+
+  color: #77849a;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+.camera-live span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #6b7280;
+}
+
+.camera-live.active {
+  color: #86efac;
+}
+
+.camera-live.active span {
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 197, 94, 0.1);
+}
+
+
+/* ============================================================
+   CAMERA CONTAINER
+============================================================ */
+
+.camera-container {
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  min-height: 400px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #030712;
+}
+
+.camera-feed {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  background: #000;
+
+  transition:
+    opacity 0.35s ease;
+}
+
+
+/* ============================================================
+   CAMERA PLACEHOLDER
+============================================================ */
+
+.camera-placeholder {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle,
+      #172033 0%,
+      #080d17 70%
+    );
+
+  z-index: 5;
+}
+
+.placeholder-circle {
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #182235;
+
+  border: 1px solid #29364b;
+
+  font-size: 27px;
+
+  margin-bottom: 15px;
+}
+
+.camera-placeholder h3 {
+  margin: 0;
+
+  font-size: 16px;
+
+  color: #e5e7eb;
+}
+
+.camera-placeholder p {
+  max-width: 300px;
+
+  margin: 7px 0 0;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+
+  color: #7d899d;
+}
+
+
+/* ============================================================
+   CAMERA LOADING SCREEN
+============================================================ */
+
+.camera-loading {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #172033 0%,
+      #0b111d 55%,
+      #030712 100%
+    );
+
+  z-index: 10;
+
+  animation: cameraLoadingAppear 0.25s ease;
+}
+
+
+/* ============================================================
+   LOADING CAMERA ICON
+============================================================ */
+
+.loading-camera-icon {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: #182235;
+
+  border: 1px solid #29364b;
+
+  font-size: 28px;
+
+  margin-bottom: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+
+  animation:
+    loadingIconPulse 2s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   LOADING SPINNER
+============================================================ */
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+
+  margin-bottom: 17px;
+
+  border-radius: 50%;
+
+  border: 3px solid #29364b;
+
+  border-top-color: #6366f1;
+
+  animation:
+    cameraSpin 0.85s linear infinite;
+}
+
+
+/* ============================================================
+   LOADING HEADING
+============================================================ */
+
+.camera-loading h3 {
+  margin: 0;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #f8fafc;
+}
+
+
+/* ============================================================
+   LOADING DESCRIPTION
+============================================================ */
+
+.camera-loading p {
+  margin: 7px 0 0;
+
+  font-size: 12px;
+
+  color: #9aa7bb;
+}
+
+
+/* ============================================================
+   CPU MESSAGE
+============================================================ */
+
+.camera-loading > span {
+  margin-top: 8px;
+
+  font-size: 10px;
+
+  color: #66748a;
+}
+
+
+/* ============================================================
+   CAMERA VISIBILITY
+============================================================ */
+
+.camera-feed.camera-hidden {
+  visibility: hidden;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.camera-feed.camera-visible {
+  visibility: visible;
+
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transition:
+    opacity 0.35s ease;
+}
+
+
+/* ============================================================
+   CAMERA FALL ALERT
+============================================================ */
+
+.camera-alert {
+  position: absolute;
+
+  top: 18px;
+  left: 18px;
+
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px 13px;
+
+  border-radius: 8px;
+
+  background: rgba(220, 38, 38, 0.94);
+
+  color: white;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.2);
+
+  animation:
+    alertBlink 1.2s infinite;
+}
+
+
+/* ============================================================
+   CONTROL CARD
+============================================================ */
+
+.control-card {
+  width: 100%;
+
+  min-height: 82px;
+
+  padding: 17px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border: 1px solid #e4e8ee;
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 16px rgba(15, 23, 42, 0.035);
+}
+
+.control-info {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.control-icon {
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f1f3f9;
+
+  font-size: 16px;
+}
+
+.control-info h3 {
+  margin: 0;
+
+  font-size: 13px;
+
+  color: #273142;
+}
+
+.control-info p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #8992a2;
+}
+
+.controls {
+  display: flex;
+
+  gap: 9px;
+}
+
+.controls button {
+  min-width: 150px;
+
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.controls button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.controls button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.start-button {
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4f46e5,
+      #6366f1
+    );
+
+  box-shadow:
+    0 5px 14px rgba(79, 70, 229, 0.2);
+}
+
+.stop-button {
+  color: #dc2626;
+
+  background: #fff1f2;
+
+  border: 1px solid #fecdd3 !important;
+}
+
+
+/* ============================================================
+   METRICS
+============================================================ */
+
+.metrics-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+.metric-card {
+  padding: 19px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e8ee;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.03);
+}
+
+.metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-top > span {
+  font-size: 11px;
+
+  font-weight: 650;
+
+  color: #7b8494;
+}
+
+.metric-icon {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #f2f4ff;
+
+  color: #6366f1;
+
+  font-size: 15px;
+}
+
+.metric-card strong {
+  display: block;
+
+  margin-top: 12px;
+
+  font-size: 24px;
+
+  line-height: 1;
+
+  letter-spacing: -0.5px;
+
+  color: #182033;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card small {
+  display: block;
+
+  margin-top: 7px;
+
+  font-size: 10px;
+
+  color: #a0a8b5;
+}
+
+
+/* ============================================================
+   DETAILS CARD
+============================================================ */
+
+.details-card {
+  width: 100%;
+
+  padding: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #e4e8ee;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 4px 17px rgba(15, 23, 42, 0.035);
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: 17px;
+
+  border-bottom: 1px solid #edf0f4;
+}
+
+.details-title {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.details-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f1f3ff;
+
+  color: #6366f1;
+
+  font-size: 17px;
+}
+
+.details-title h3 {
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #273142;
+}
+
+.details-title p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #8c95a5;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 9px;
+
+  border-radius: 6px;
+
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+.live-indicator > span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #9ca3af;
+}
+
+.live-indicator.active {
+  color: #16a34a;
+
+  background: #f0fdf4;
+}
+
+.live-indicator.active > span {
+  background: #22c55e;
+}
+
+
+/* ============================================================
+   DETAILS GRID
+============================================================ */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  column-gap: 45px;
+}
+
+.detail-item {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom: 1px solid #f1f3f6;
+}
+
+.detail-item span {
+  font-size: 11px;
+
+  color: #8992a2;
+}
+
+.detail-item strong {
+  font-size: 11px;
+
+  font-weight: 700;
+
+  color: #354052;
+
+  text-align: right;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.safe-text {
+  color: #16a34a !important;
+}
+
+.danger-text {
+  color: #dc2626 !important;
+}
+
+
+/* ============================================================
+   MONITORING MESSAGE
+============================================================ */
+
+.monitoring-message {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 13px 16px;
+
+  border-radius: 11px;
+
+  background: #f0fdf4;
+
+  border: 1px solid #dcfce7;
+}
+
+.monitoring-check {
+  width: 29px;
+  height: 29px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dcfce7;
+
+  color: #16a34a;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.monitoring-message strong {
+  display: block;
+
+  font-size: 11px;
+
+  color: #166534;
+}
+
+.monitoring-message span {
+  display: block;
+
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  color: #65a675;
+}
+
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+footer {
+  min-height: 65px;
+
+  padding: 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #ffffff;
+
+  border-top: 1px solid #e5e8ed;
+
+  color: #9aa2af;
+
+  font-size: 10px;
+}
+
+footer div {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+footer strong {
+  color: #687285;
+
+  font-size: 11px;
+}
+
+footer span {
+  color: #a0a7b3;
+}
+
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+
+@keyframes pulseAlert {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(239, 68, 68, 0);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 5px rgba(239, 68, 68, 0.08);
+  }
+}
+
+@keyframes alertBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes alertAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ============================================================
+   CAMERA LOADING ANIMATIONS
+============================================================ */
+
+@keyframes cameraSpin {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cameraLoadingAppear {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes loadingIconPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  50% {
+    transform: scale(1.04);
+
+    box-shadow:
+      0 12px 35px rgba(99, 102, 241, 0.16);
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLET
+============================================================ */
+
+@media (max-width: 900px) {
+
+  .header {
+    padding: 0 24px;
+  }
+
+  .dashboard {
+    width: calc(100% - 30px);
+  }
+
+  .metrics-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .camera-container {
+    min-height: 300px;
+  }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+============================================================ */
+
+@media (max-width: 600px) {
+
+  .header {
+    height: auto;
+
+    padding: 17px;
+
+    gap: 15px;
+
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .dashboard {
+    width: calc(100% - 20px);
+
+    padding-top: 22px;
+
+    gap: 15px;
+  }
+
+  .page-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 13px;
+  }
+
+  .page-heading h2 {
+    font-size: 24px;
+  }
+
+  .monitor-badge {
+    align-self: flex-start;
+  }
+
+  .fall-alert {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .event-time {
+    width: 100%;
+
+    padding: 10px 0 0;
+
+    border-left: none;
+
+    border-top: 1px solid #fecaca;
+
+    text-align: left;
+  }
+
+  .camera-header {
+    min-height: 62px;
+
+    padding: 0 14px;
+  }
+
+  .camera-container {
+    min-height: 230px;
+
+    aspect-ratio: 4 / 3;
+  }
+
+  .control-card {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .controls {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .controls button {
+    width: 100%;
+  }
+
+  .metrics-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .metric-card {
+    padding: 15px;
+  }
+
+  .metric-card strong {
+    font-size: 21px;
+  }
+
+  .details-card {
+    padding: 17px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+
+    column-gap: 0;
+  }
+
+  footer {
+    height: auto;
+
+    padding: 18px;
+
+    gap: 8px;
+
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS
+============================================================ */
+
+@media (max-width: 380px) {
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-container {
+    min-height: 210px;
+  }
+
+}
