@@ -50,3 +50,5 @@ Thumbs.db
 # ================================
 
 *.log
+# Trained model (kept locally)
+Models/*.pt
