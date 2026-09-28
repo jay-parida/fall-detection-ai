@@ -6,6 +6,9 @@ import sys
 import time
 import uuid
 
+from Inference.lighting_monitor import LightingMonitor
+from Inference.mlops_logger import MLOpsLogger
+
 
 # ============================================================
 # FALL DETECTOR PATH
@@ -23,6 +26,124 @@ DETECTOR_PATH = os.path.join(
     PROJECT_ROOT,
     "fall_detector.py"
 )
+
+
+# ============================================================
+# LIGHTING MONITOR
+# ============================================================
+
+LIGHTING_FRAME_PATH = os.path.join(
+    PROJECT_ROOT,
+    "camera_frames",
+    "latest.jpg"
+)
+
+lighting_monitor = LightingMonitor(
+    LIGHTING_FRAME_PATH
+)
+
+
+# ============================================================
+# MLOPS LOGGER
+# ============================================================
+
+MLOPS_LOG_PATH = os.path.join(
+    PROJECT_ROOT,
+    "Data",
+    "mlops_logs.csv"
+)
+
+mlops_logger = MLOpsLogger(
+    MLOPS_LOG_PATH
+)
+
+mlops_logging = False
+mlops_logging_thread = None
+
+
+# ============================================================
+# MLOPS LOGGING LOOP
+# ============================================================
+
+def mlops_logging_loop():
+
+    global mlops_logging
+
+    print(
+        "[MLOPS] Data logger started.",
+        flush=True
+    )
+
+    while mlops_logging:
+
+        try:
+
+            status = get_status()
+
+            mlops_logger.log(status)
+
+        except Exception as e:
+
+            print(
+                f"[MLOPS] Logging error: {e}",
+                flush=True
+            )
+
+        time.sleep(1)
+
+
+    print(
+        "[MLOPS] Data logger stopped.",
+        flush=True
+    )
+
+
+# ============================================================
+# START MLOPS LOGGER
+# ============================================================
+
+def start_mlops_logger():
+
+    global mlops_logging
+    global mlops_logging_thread
+
+    if mlops_logging:
+
+        return
+
+    mlops_logging = True
+
+    mlops_logging_thread = threading.Thread(
+
+        target=mlops_logging_loop,
+
+        daemon=True,
+
+        name="MLOpsLogger"
+
+    )
+
+    mlops_logging_thread.start()
+
+
+# ============================================================
+# STOP MLOPS LOGGER
+# ============================================================
+
+def stop_mlops_logger():
+
+    global mlops_logging
+    global mlops_logging_thread
+
+    mlops_logging = False
+
+    if mlops_logging_thread is not None:
+
+        mlops_logging_thread.join(
+            timeout=2
+        )
+
+        mlops_logging_thread = None
 
 
 # ============================================================
@@ -62,7 +183,19 @@ current_status = {
 
     "event_timer": 0,
 
-    "process_running": False
+    "process_running": False,
+
+    # --------------------------------------------------------
+    # LIGHTING INFORMATION
+    # --------------------------------------------------------
+
+    "lighting": "UNKNOWN",
+
+    "brightness": 0.0,
+
+    "contrast": 0.0,
+
+    "blur_score": 0.0
 }
 
 
@@ -90,21 +223,6 @@ current_event = {
 # STATUS LOCK
 # ============================================================
 
-# IMPORTANT:
-#
-# RLock allows the same thread to acquire the lock multiple
-# times safely.
-#
-# This prevents the deadlock that could happen when:
-#
-# read_detector_output()
-#       ↓
-# parse_status_line()
-#       ↓
-# start_fall_event()
-#
-# all use the same lock.
-#
 status_lock = threading.RLock()
 
 
@@ -144,7 +262,19 @@ def reset_status(status="STOPPED"):
 
             "event_timer": 0,
 
-            "process_running": False
+            "process_running": False,
+
+            # ------------------------------------------------
+            # LIGHTING INFORMATION
+            # ------------------------------------------------
+
+            "lighting": "UNKNOWN",
+
+            "brightness": 0.0,
+
+            "contrast": 0.0,
+
+            "blur_score": 0.0
         }
 
 
@@ -184,17 +314,11 @@ def start_fall_event():
 
     with status_lock:
 
-        # ----------------------------------------------------
-        # Prevent duplicate event
-        # ----------------------------------------------------
-
         if current_event["active"]:
 
             return
 
-
         now = time.time()
-
 
         current_event = {
 
@@ -217,12 +341,10 @@ def start_fall_event():
                 "FALL DETECTED"
         }
 
-
         print(
             "[EVENT] Fall event started.",
             flush=True
         )
-
 
         print(
             f"[EVENT] Event ID: "
@@ -241,25 +363,17 @@ def end_fall_event():
 
     with status_lock:
 
-        # ----------------------------------------------------
-        # Nothing to end
-        # ----------------------------------------------------
-
         if not current_event["active"]:
 
             return
 
-
         now = time.time()
-
 
         start_time = (
             current_event["start_time"]
         )
 
-
         duration = 0
-
 
         if start_time is not None:
 
@@ -267,7 +381,6 @@ def end_fall_event():
                 now - start_time,
                 2
             )
-
 
         current_event["active"] = False
 
@@ -277,12 +390,10 @@ def end_fall_event():
 
         current_event["status"] = "RECOVERED"
 
-
         print(
             "[EVENT] Fall event ended.",
             flush=True
         )
-
 
         print(
             f"[EVENT] Duration: "
@@ -299,20 +410,13 @@ def parse_status_line(line):
 
     global current_status
 
-
-    # --------------------------------------------------------
-    # Only parse the main detector status line
-    # --------------------------------------------------------
-
     if "Confidence:" not in line:
 
         return
 
-
     if "EventActive:" not in line:
 
         return
-
 
     # ========================================================
     # CONFIDENCE
@@ -329,7 +433,6 @@ def parse_status_line(line):
             match.group(1)
         )
 
-
     # ========================================================
     # MOVEMENT
     # ========================================================
@@ -344,7 +447,6 @@ def parse_status_line(line):
         current_status["movement"] = float(
             match.group(1)
         )
-
 
     # ========================================================
     # VERTICAL MOVEMENT
@@ -361,7 +463,6 @@ def parse_status_line(line):
             match.group(1)
         )
 
-
     # ========================================================
     # DIRECTION
     # ========================================================
@@ -376,7 +477,6 @@ def parse_status_line(line):
         current_status["direction"] = (
             match.group(1)
         )
-
 
     # ========================================================
     # RATIO
@@ -393,7 +493,6 @@ def parse_status_line(line):
             match.group(1)
         )
 
-
     # ========================================================
     # RATIO CHANGE
     # ========================================================
@@ -408,7 +507,6 @@ def parse_status_line(line):
         current_status["ratio_change"] = float(
             match.group(1)
         )
-
 
     # ========================================================
     # CANDIDATE
@@ -425,7 +523,6 @@ def parse_status_line(line):
             match.group(1) == "True"
         )
 
-
     # ========================================================
     # SCORE
     # ========================================================
@@ -440,7 +537,6 @@ def parse_status_line(line):
         current_status["score"] = int(
             match.group(1)
         )
-
 
     # ========================================================
     # EVENT ACTIVE
@@ -457,11 +553,9 @@ def parse_status_line(line):
             match.group(1) == "True"
         )
 
-
         current_status["event_active"] = (
             event_active
         )
-
 
         if event_active:
 
@@ -469,35 +563,15 @@ def parse_status_line(line):
                 "FALL DETECTED"
             )
 
-
-            # ------------------------------------------------
-            # Start event if not already active
-            # ------------------------------------------------
-
             start_fall_event()
 
-
         else:
-
-            # ------------------------------------------------
-            # IMPORTANT:
-            #
-            # EventActive=False does NOT automatically mean
-            # recovered.
-            #
-            # Recovery should normally be confirmed by:
-            #
-            # PERSON RECOVERED
-            #
-            # from the detector.
-            # ------------------------------------------------
 
             if not current_event["active"]:
 
                 current_status["status"] = (
                     "MONITORING"
                 )
-
 
     # ========================================================
     # RECOVERY
@@ -513,7 +587,6 @@ def parse_status_line(line):
         current_status["recovery"] = (
             match.group(1)
         )
-
 
     # ========================================================
     # EVENT TIMER
@@ -540,14 +613,11 @@ def read_detector_output():
     global detector_process
     global current_status
 
-
     process = detector_process
-
 
     if process is None:
 
         return
-
 
     try:
 
@@ -560,24 +630,16 @@ def read_detector_output():
 
                 break
 
-
             line = raw_line.strip()
-
 
             if not line:
 
                 continue
 
-
-            # ------------------------------------------------
-            # Show detector output in backend terminal
-            # ------------------------------------------------
-
             print(
                 f"[DETECTOR] {line}",
                 flush=True
             )
-
 
             # =================================================
             # FALL DETECTED
@@ -595,9 +657,7 @@ def read_detector_output():
                         True
                     )
 
-
                 start_fall_event()
-
 
             # =================================================
             # PERSON RECOVERED
@@ -619,9 +679,7 @@ def read_detector_output():
                         "0/5"
                     )
 
-
                 end_fall_event()
-
 
             # =================================================
             # NORMAL STATUS LINE
@@ -631,14 +689,12 @@ def read_detector_output():
 
                 parse_status_line(line)
 
-
     except Exception as e:
 
         print(
             f"[DETECTOR] Output reader error: {e}",
             flush=True
         )
-
 
     finally:
 
@@ -647,7 +703,6 @@ def read_detector_output():
             current_status[
                 "process_running"
             ] = False
-
 
         print(
             "[BACKEND] Detector output reader stopped.",
@@ -662,7 +717,6 @@ def read_detector_output():
 def start_detector():
 
     global detector_process
-
 
     # ========================================================
     # CHECK IF ALREADY RUNNING
@@ -679,7 +733,6 @@ def start_detector():
 
             return False
 
-
     # ========================================================
     # CHECK DETECTOR FILE
     # ========================================================
@@ -694,18 +747,15 @@ def start_detector():
 
         return False
 
-
     print(
         "[BACKEND] Starting Fall Detection Engine...",
         flush=True
     )
 
-
     print(
         f"[BACKEND] Detector path: {DETECTOR_PATH}",
         flush=True
     )
-
 
     # ========================================================
     # RESET STATUS
@@ -715,9 +765,8 @@ def start_detector():
 
     reset_event()
 
-
     # ========================================================
-    # START PROCESS
+    # START FALL DETECTOR PROCESS
     # ========================================================
 
     try:
@@ -739,9 +788,7 @@ def start_detector():
             text=True,
 
             bufsize=1
-
         )
-
 
     except Exception as e:
 
@@ -758,6 +805,17 @@ def start_detector():
 
         return False
 
+    # ========================================================
+    # START LIGHTING MONITOR
+    # ========================================================
+
+    lighting_monitor.start()
+
+    # ========================================================
+    # START MLOPS LOGGER
+    # ========================================================
+
+    start_mlops_logger()
 
     # ========================================================
     # MARK PROCESS RUNNING
@@ -773,7 +831,6 @@ def start_detector():
             "status"
         ] = "MONITORING"
 
-
     # ========================================================
     # START OUTPUT READER THREAD
     # ========================================================
@@ -785,18 +842,14 @@ def start_detector():
         daemon=True,
 
         name="FallDetectorOutputReader"
-
     )
 
-
     thread.start()
-
 
     print(
         "[BACKEND] Fall Detection Engine started.",
         flush=True
     )
-
 
     return True
 
@@ -809,7 +862,6 @@ def stop_detector():
 
     global detector_process
 
-
     if detector_process is None:
 
         print(
@@ -819,9 +871,7 @@ def stop_detector():
 
         return False
 
-
     process = detector_process
-
 
     # ========================================================
     # STOP PROCESS
@@ -834,7 +884,6 @@ def stop_detector():
             flush=True
         )
 
-
         try:
 
             process.terminate()
@@ -842,7 +891,6 @@ def stop_detector():
             process.wait(
                 timeout=5
             )
-
 
         except subprocess.TimeoutExpired:
 
@@ -855,7 +903,6 @@ def stop_detector():
 
             process.wait()
 
-
         except Exception as e:
 
             print(
@@ -863,13 +910,23 @@ def stop_detector():
                 flush=True
             )
 
+    # ========================================================
+    # STOP MLOPS LOGGER
+    # ========================================================
+
+    stop_mlops_logger()
+
+    # ========================================================
+    # STOP LIGHTING MONITOR
+    # ========================================================
+
+    lighting_monitor.stop()
 
     # ========================================================
     # CLEAR PROCESS
     # ========================================================
 
     detector_process = None
-
 
     # ========================================================
     # RESET STATUS
@@ -879,12 +936,10 @@ def stop_detector():
 
     reset_event()
 
-
     print(
         "[BACKEND] Detector stopped.",
         flush=True
     )
-
 
     return True
 
@@ -897,11 +952,19 @@ def get_status():
 
     global detector_process
 
-
     with status_lock:
 
         status = current_status.copy()
 
+        # ====================================================
+        # GET LATEST LIGHTING INFORMATION
+        # ====================================================
+
+        lighting = lighting_monitor.get_status()
+
+        status.update(
+            lighting
+        )
 
         # ----------------------------------------------------
         # Get real process state
@@ -913,11 +976,9 @@ def get_status():
                 detector_process.poll() is None
             )
 
-
             status[
                 "process_running"
             ] = running
-
 
             # ------------------------------------------------
             # Unexpected process termination
@@ -933,13 +994,11 @@ def get_status():
                     "event_active"
                 ] = False
 
-
         else:
 
             status[
                 "process_running"
             ] = False
-
 
     return status
 
@@ -953,7 +1012,6 @@ def get_event():
     with status_lock:
 
         event = current_event.copy()
-
 
         # ----------------------------------------------------
         # Update active event duration
@@ -969,6 +1027,5 @@ def get_event():
                     event["start_time"],
                     2
                 )
-
 
     return event
