@@ -50,5 +50,6 @@ Thumbs.db
 # ================================
 
 *.log
-# Trained model (kept locally)
+# Trained models (kept locally unless explicitly versioned)
 Models/*.pt
+!Models/best.pt
