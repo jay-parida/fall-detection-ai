@@ -1,0 +1,6 @@
+outs:
+- md5: 77564a74d553fb719e8e2b504b7d97c8.dir
+  size: 144012560
+  nfiles: 8997
+  hash: md5
+  path: Fall Detection.v1-raw-images.yolov11
